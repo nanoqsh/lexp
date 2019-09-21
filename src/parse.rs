@@ -57,3 +57,54 @@ impl<'p, 't, P> Iterator for ParseIterator<'p, 't, P> where
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::lexer::lex;
+    use crate::read_token::ReadToken;
+
+    #[derive(Copy, Clone, PartialEq, Debug, ReadToken)]
+    enum Token {
+        Eq,
+        Plus,
+        Star,
+        One,
+        X,
+        LeftBracket,
+        RightBracket,
+        Semicolon,
+    }
+
+    #[test]
+    fn tokenize() {
+        let lx =
+              lex('=', Token::Eq)
+            | lex('+', Token::Plus)
+            | lex('*', Token::Star)
+            | lex('1', Token::One)
+            | lex('x', Token::X)
+            | lex('(', Token::LeftBracket)
+            | lex(')', Token::RightBracket)
+            | lex(';', Token::Semicolon);
+
+        let code = "x=(1+1)*x;";
+        let tokens: Vec<Token> = lx.tokenize(code).map(|r| match r {
+            ParseResult::Ok(tok, _) => tok,
+            ParseResult::UnexpectedAt(_) => unreachable!(),
+        }).collect();
+
+        assert_eq!(tokens, [
+            Token::X,
+            Token::Eq,
+            Token::LeftBracket,
+            Token::One,
+            Token::Plus,
+            Token::One,
+            Token::RightBracket,
+            Token::Star,
+            Token::X,
+            Token::Semicolon,
+        ]);
+    }
+}
