@@ -1,0 +1,8 @@
+[package]
+name = "lexp"
+version = "0.1.0"
+authors = ["nanonicholson <nanonicholson@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+read-token-derive = { path = "read-token-derive" }
