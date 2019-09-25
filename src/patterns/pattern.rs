@@ -1,6 +1,6 @@
 
 use crate::read_pattern::ReadPattern;
-use crate::patterns::{OrPattern, AndPattern, RangePattern, ManyPattern};
+use crate::patterns::{OrPattern, AndPattern, RangePattern, ManyPattern, UntilPattern};
 use std::ops::{
     BitOr,
     BitAnd,
@@ -15,6 +15,12 @@ use std::ops::{
 
 #[derive(Copy, Clone, Debug)]
 pub struct Pattern<T>(pub T);
+
+impl<T: ReadPattern> Pattern<T> {
+    pub fn until<U: ReadPattern>(self, pattern: U) -> UntilPattern<T, U> {
+        UntilPattern(self.0, pattern)
+    }
+}
 
 pub fn pat<T: ReadPattern>(pattern: T) -> Pattern<T> {
     Pattern(pattern)

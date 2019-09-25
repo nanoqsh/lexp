@@ -14,15 +14,21 @@ pub mod patterns {
     mod and_pattern;
     mod range_pattern;
     mod many_pattern;
+    mod until_pattern;
+    mod any_pattern;
 
     pub use pattern::{Pattern, pat};
     pub use or_pattern::OrPattern;
     pub use and_pattern::AndPattern;
     pub use range_pattern::RangePattern;
     pub use many_pattern::ManyPattern;
+    pub use until_pattern::UntilPattern;
+    pub use any_pattern::{AnyPattern, ANY};
 }
 
 pub use lexer::{lex, Lexer, Lexeme};
 pub use parse::{ParseResult, Parse, ParseIterator};
 pub use read_token::ReadToken;
 pub use read_pattern::ReadPattern;
+
+mod tests;
