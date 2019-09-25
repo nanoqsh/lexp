@@ -1,4 +1,5 @@
 
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum ParseResult<T> {
     Ok(T, usize),
     UnexpectedAt(usize),
