@@ -38,41 +38,41 @@ impl<T, R> ReadPattern for RangePattern<T, R> where
 
 #[cfg(test)]
 mod tests {
-    use super::super::Pattern;
+    use super::super::pat;
     use crate::ReadPattern;
 
     #[test]
     fn range_pattern() {
-        let full = Pattern("a") * ..;
+        let full = pat("a") * ..;
         assert!(full.test_pattern(""));
         assert!(full.test_pattern("a"));
         assert!(full.test_pattern("aa"));
         assert!(full.test_pattern("aaa"));
 
-        let from = Pattern("b") * (2..);
+        let from = pat("b") * (2..);
         assert!(!from.test_pattern(""));
         assert!(!from.test_pattern("b"));
         assert!(from.test_pattern("bb"));
         assert!(from.test_pattern("bbb"));
 
-        let to = Pattern("c") * ..2;
+        let to = pat("c") * ..2;
         assert!(to.test_pattern(""));
         assert!(to.test_pattern("c"));
         assert!(!to.test_pattern("cc"));
 
-        let to_inclusive = Pattern("d") * ..=2;
+        let to_inclusive = pat("d") * ..=2;
         assert!(to_inclusive.test_pattern(""));
         assert!(to_inclusive.test_pattern("d"));
         assert!(to_inclusive.test_pattern("dd"));
         assert!(!to_inclusive.test_pattern("ddd"));
 
-        let range = Pattern("e") * (1..3);
+        let range = pat("e") * (1..3);
         assert!(!range.test_pattern(""));
         assert!(range.test_pattern("e"));
         assert!(range.test_pattern("ee"));
         assert!(!range.test_pattern("eee"));
 
-        let range_inclusive = Pattern("f") * (1..=2);
+        let range_inclusive = pat("f") * (1..=2);
         assert!(!range_inclusive.test_pattern(""));
         assert!(range_inclusive.test_pattern("f"));
         assert!(range_inclusive.test_pattern("ff"));
