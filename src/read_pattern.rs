@@ -3,6 +3,13 @@ use std::ops::{Range, RangeInclusive};
 
 pub trait ReadPattern {
     fn read_pattern(&self, text: &str) -> Option<usize>;
+
+    fn test_pattern(&self, text: &str) -> bool {
+        match self.read_pattern(text) {
+            Some(len) => len == text.len(),
+            None => false,
+        }
+    }
 }
 
 impl ReadPattern for &str {

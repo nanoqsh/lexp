@@ -13,3 +13,29 @@ impl<L, R> ReadPattern for AndPattern<L, R> where
         Some(len_a + len_b)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::super::Pattern;
+    use crate::ReadPattern;
+
+    #[test]
+    fn and_pattern() {
+        let pattern = Pattern("foo") & "bar";
+        assert!(pattern.test_pattern("foobar"));
+        assert!(!pattern.test_pattern("foo"));
+        assert!(!pattern.test_pattern("bar"));
+        assert!(!pattern.test_pattern(""));
+
+        let a = Pattern("") & "a";
+        assert!(a.test_pattern("a"));
+
+        let b = Pattern("") & "b";
+        assert!(b.test_pattern("b"));
+
+        let empty_pattern = Pattern("") & "";
+        assert!(empty_pattern.test_pattern(""));
+        assert!(!empty_pattern.test_pattern("a"));
+        assert!(!empty_pattern.test_pattern("b"));
+    }
+}
