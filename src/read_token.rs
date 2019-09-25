@@ -17,7 +17,6 @@ impl<'t, T, F> ReadToken<'t> for F where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::read_pattern::ReadPattern;
 
     #[derive(Copy, Clone, PartialEq, Debug, ReadToken)]
     enum Token {

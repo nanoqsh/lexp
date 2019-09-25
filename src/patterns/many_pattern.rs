@@ -19,3 +19,31 @@ impl<T> ReadPattern for ManyPattern<T> where
         Some(len)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::super::pat;
+    use crate::ReadPattern;
+
+    #[test]
+    fn many_pattern() {
+        let pattern = pat("ab") * 3;
+        assert!(pattern.test_pattern("ababab"));
+        assert!(!pattern.test_pattern("aba"));
+        assert!(!pattern.test_pattern("a"));
+        assert!(!pattern.test_pattern("abab"));
+        assert!(!pattern.test_pattern("abababab"));
+        assert!(!pattern.test_pattern(""));
+
+        let empty_pattern = pat("b") * 0;
+        assert!(empty_pattern.test_pattern(""));
+
+        let pattern = pat("z") * 4;
+        assert!(!pattern.test_pattern(""));
+        assert!(!pattern.test_pattern("z"));
+        assert!(!pattern.test_pattern("zz"));
+        assert!(!pattern.test_pattern("zzz"));
+        assert!(pattern.test_pattern("zzzz"));
+        assert!(!pattern.test_pattern("zzzzz"));
+    }
+}

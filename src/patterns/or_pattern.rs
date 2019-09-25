@@ -14,3 +14,35 @@ impl<L, R> ReadPattern for OrPattern<L, R> where
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::super::Pattern;
+    use crate::ReadPattern;
+
+    #[test]
+    fn or_pattern() {
+        let pattern = Pattern("foo") | "bar";
+        assert!(pattern.test_pattern("foo"));
+        assert!(pattern.test_pattern("bar"));
+        assert!(!pattern.test_pattern("baz"));
+        assert!(!pattern.test_pattern(""));
+
+        let a = Pattern("a") | "";
+        assert!(a.test_pattern(""));
+        assert!(a.test_pattern("a"));
+        assert!(!a.test_pattern("b"));
+
+        let b = Pattern("") | "b";
+        assert!(b.test_pattern(""));
+
+        // This pattern will match "" first
+        // thus "b" will never match
+        assert!(!b.test_pattern("b"));
+        assert!(!b.test_pattern("a"));
+
+        let empty_pattern = Pattern("") | "";
+        assert!(empty_pattern.test_pattern(""));
+        assert!(!empty_pattern.test_pattern("x"));
+    }
+}
