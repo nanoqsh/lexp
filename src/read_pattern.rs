@@ -7,7 +7,7 @@ pub trait ReadPattern {
     fn test_pattern(&self, text: &str) -> bool {
         match self.read_pattern(text) {
             Some(len) => len == text.len(),
-            None => false,
+            None      => false,
         }
     }
 }
@@ -43,7 +43,7 @@ impl<F: Fn(char) -> bool> ReadPattern for F {
     fn read_pattern(&self, text: &str) -> Option<usize> {
         match text.chars().next() {
             Some(ch) if self(ch) => Some(ch.len_utf8()),
-            _ => None,
+            _                    => None,
         }
     }
 }

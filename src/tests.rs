@@ -9,6 +9,7 @@ use crate::ReadToken;
 #[derive(Copy, Clone, PartialEq, Debug, ReadToken)]
 enum Token<'t> {
     Empty,
+    NewLine,
     Plus,
     Star,
     Eq,
@@ -33,6 +34,7 @@ fn test_lexer() {
 
     let lx =
           lex(' ',         Token::Empty)
+        | lex('\n',        Token::NewLine)
         | lex('+',         Token::Plus)
         | lex('*',         Token::Star)
         | lex('=',         Token::Eq)
@@ -48,13 +50,13 @@ fn test_lexer() {
           })
         | lex(comment, |n| Token::Comment(n));
 
-    let code = "let x = 10;\
-                /* 🦄 */\
-                if (x = 12) x * 4;\
-                else x + 1;";
+    let code = String::from("let x = 10;
+                /* 🦄 */
+                if (x = 12) x * 4;
+                else x + 1;");
 
     let tokens: Vec<Token> = lx
-        .tokenize(code)
+        .tokenize(code.as_str())
         .map(|r| match r {
             ParseResult::Ok(tok, _) => tok,
             ParseResult::UnexpectedAt(_) => unreachable!(),
@@ -68,8 +70,10 @@ fn test_lexer() {
         Token::Eq,                  // =
         Token::Number(10),          // 10
         Token::Semicolon,           // ;
+        Token::NewLine,
 
         Token::Comment("/* 🦄 */"), // /* 🦄 */
+        Token::NewLine,
 
         Token::If,                  // if
         Token::LeftBracket,         // (
@@ -81,6 +85,7 @@ fn test_lexer() {
         Token::Star,                // *
         Token::Number(4),           // 4
         Token::Semicolon,           // ;
+        Token::NewLine,
 
         Token::Else,                // else
         Token::Name("x"),           // x
