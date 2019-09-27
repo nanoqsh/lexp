@@ -23,8 +23,8 @@ pub fn read_token(input: TokenStream) -> TokenStream {
 fn impl_read_token_lifetime(ast: &syn::DeriveInput) -> quote::Tokens {
     let name = &ast.ident;
     quote! {
-        impl ReadToken<'static> for #name<'static> {
-            type Token = #name<'static>;
+        impl<'t> ReadToken<'t> for #name<'t> {
+            type Token = #name<'t>;
 
             fn read_token(&self, _: &str) -> Self::Token {
                 self.clone()

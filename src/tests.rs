@@ -50,13 +50,13 @@ fn test_lexer() {
           })
         | lex(comment, |n| Token::Comment(n));
 
-    let code = "let x = 10;
+    let code = String::from("let x = 10;
                 /* 🦄 */
                 if (x = 12) x * 4;
-                else x + 1;";
+                else x + 1;");
 
     let tokens: Vec<Token> = lx
-        .tokenize(code)
+        .tokenize(code.as_str())
         .map(|r| match r {
             ParseResult::Ok(tok, _) => tok,
             ParseResult::UnexpectedAt(_) => unreachable!(),
