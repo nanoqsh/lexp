@@ -1,4 +1,3 @@
-
 use crate::read_pattern::ReadPattern;
 
 #[derive(Copy, Clone, Debug)]
@@ -18,8 +17,8 @@ impl ReadPattern for AnyPattern {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::super::pat;
+    use super::*;
     use crate::ReadPattern;
 
     #[test]

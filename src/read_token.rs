@@ -1,12 +1,13 @@
-
 pub trait ReadToken<'t> {
     type Token;
     fn read_token(&self, text: &'t str) -> Self::Token;
 }
 
-impl<'t, T, F> ReadToken<'t> for F where
+impl<'t, T, F> ReadToken<'t> for F
+where
     T: ReadToken<'t>,
-    F: Fn(&'t str) -> T {
+    F: Fn(&'t str) -> T,
+{
     type Token = T;
 
     fn read_token(&self, text: &'t str) -> Self::Token {
@@ -36,7 +37,7 @@ mod tests {
         let rt = |text: &str| match text {
             "A" => Token::A,
             "B" => Token::B,
-            _   => Token::Undefined
+            _ => Token::Undefined,
         };
 
         assert_eq!(rt.read_token("A"), Token::A);
