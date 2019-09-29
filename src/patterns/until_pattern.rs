@@ -1,19 +1,20 @@
-
 use crate::read_pattern::ReadPattern;
 
 #[derive(Copy, Clone, Debug)]
 pub struct UntilPattern<P, U>(pub P, pub U);
 
-impl<P, U> ReadPattern for UntilPattern<P, U> where
+impl<P, U> ReadPattern for UntilPattern<P, U>
+where
     P: ReadPattern,
-    U: ReadPattern {
+    U: ReadPattern,
+{
     fn read_pattern(&self, text: &str) -> Option<usize> {
         let mut len = 0;
 
         loop {
             let rest = &text[len..];
             match self.1.read_pattern(rest) {
-                None          => len += self.0.read_pattern(rest)?,
+                None => len += self.0.read_pattern(rest)?,
                 Some(end_len) => break Some(len + end_len),
             }
         }
@@ -23,8 +24,8 @@ impl<P, U> ReadPattern for UntilPattern<P, U> where
 #[cfg(test)]
 mod tests {
     use super::super::pat;
-    use crate::ReadPattern;
     use crate::patterns::ANY;
+    use crate::ReadPattern;
 
     #[test]
     fn until_use() {

@@ -1,4 +1,3 @@
-
 use super::parse::Parse;
 use super::read_pattern::ReadPattern;
 use super::read_token::ReadToken;
@@ -9,18 +8,22 @@ pub struct Lexeme<P, R> {
     read_token: R,
 }
 
-pub fn lex<'t, P, R>(read_pattern: P, read_token: R) -> Lexeme<P, R> where
+pub fn lex<'t, P, R>(read_pattern: P, read_token: R) -> Lexeme<P, R>
+where
     P: ReadPattern,
-    R: ReadToken<'t> {
+    R: ReadToken<'t>,
+{
     Lexeme {
         read_pattern,
         read_token,
     }
 }
 
-impl<'t, P, R> Parse<'t> for Lexeme<P, R> where
+impl<'t, P, R> Parse<'t> for Lexeme<P, R>
+where
     P: ReadPattern,
-    R: ReadToken<'t> {
+    R: ReadToken<'t>,
+{
     type Token = R::Token;
 
     fn parse(&self, text: &'t str) -> Option<(Self::Token, usize)> {
@@ -30,10 +33,12 @@ impl<'t, P, R> Parse<'t> for Lexeme<P, R> where
     }
 }
 
-impl<'t, P, T, R> BitOr<R> for Lexeme<P, T> where
+impl<'t, P, T, R> BitOr<R> for Lexeme<P, T>
+where
     P: ReadPattern,
     T: ReadToken<'t>,
-    R: Parse<'t> {
+    R: Parse<'t>,
+{
     type Output = Lexer<Lexeme<P, T>, R>;
 
     fn bitor(self, rhs: R) -> Self::Output {
@@ -54,9 +59,11 @@ pub struct Lexer<L, R> {
     right: R,
 }
 
-impl<'t, T, L, R> Parse<'t> for Lexer<L, R> where
-    L: Parse<'t, Token=T>,
-    R: Parse<'t, Token=T> {
+impl<'t, T, L, R> Parse<'t> for Lexer<L, R>
+where
+    L: Parse<'t, Token = T>,
+    R: Parse<'t, Token = T>,
+{
     type Token = T;
 
     fn parse(&self, text: &'t str) -> Option<(Self::Token, usize)> {
@@ -64,8 +71,10 @@ impl<'t, T, L, R> Parse<'t> for Lexer<L, R> where
     }
 }
 
-impl<'t, L, R, P> BitOr<P> for Lexer<L, R> where
-    P: Parse<'t> {
+impl<'t, L, R, P> BitOr<P> for Lexer<L, R>
+where
+    P: Parse<'t>,
+{
     type Output = Lexer<Lexer<L, R>, P>;
 
     fn bitor(self, rhs: P) -> Self::Output {
@@ -105,11 +114,10 @@ mod tests {
         assert_eq!(plus_or_star.parse("*").unwrap(), (Token::Star, 1));
         assert!(plus_or_star.parse(".").is_none());
 
-        let l =
-              lex("name", Token::Name)
-            | lex("=",    Token::Eq)
-            | lex("1",    Token::Num)
-            | lex(";",    Token::Semicolon);
+        let l = lex("name", Token::Name)
+            | lex("=", Token::Eq)
+            | lex("1", Token::Num)
+            | lex(";", Token::Semicolon);
 
         assert_eq!(l.parse("name").unwrap(), (Token::Name, 4));
         assert_eq!(l.parse("=").unwrap(), (Token::Eq, 1));
