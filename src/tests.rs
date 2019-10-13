@@ -38,14 +38,14 @@ fn test_lexer() {
         | lex('(', Token::LeftBracket)
         | lex(')', Token::RightBracket)
         | lex(';', Token::Semicolon)
-        | lex(number, |n| Token::Number(u32::from_str(n).unwrap()))
-        | lex(name, |n| match n {
+        | lex(number, |n, _| Token::Number(u32::from_str(n).unwrap()))
+        | lex(name, |n, _| match n {
             "let" => Token::Let,
             "if" => Token::If,
             "else" => Token::Else,
             n => Token::Name(n),
         })
-        | lex(comment, |n| Token::Comment(n));
+        | lex(comment, |n, _| Token::Comment(n));
 
     let code = String::from(
         "let x = 10;

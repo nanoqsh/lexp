@@ -13,10 +13,6 @@ impl<T: ReadPattern> Pattern<T> {
     }
 }
 
-pub fn pat<T: ReadPattern>(pattern: T) -> Pattern<T> {
-    Pattern(pattern)
-}
-
 impl<T> ReadPattern for Pattern<T>
 where
     T: ReadPattern,
@@ -24,6 +20,14 @@ where
     fn read_pattern(&self, text: &str) -> Option<usize> {
         self.0.read_pattern(text)
     }
+
+    fn read_pattern_caps<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
+        self.0.read_pattern_caps(text, buf)
+    }
+}
+
+pub fn pat<T: ReadPattern>(pattern: T) -> Pattern<T> {
+    Pattern(pattern)
 }
 
 impl<L, R> BitOr<R> for Pattern<L>

@@ -13,11 +13,18 @@ where
         let len_b = self.1.read_pattern(&text[len_a..])?;
         Some(len_a + len_b)
     }
+
+    fn read_pattern_caps<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
+        let len_a = self.0.read_pattern_caps(text, buf)?;
+        let len_b = self.1.read_pattern_caps(&text[len_a..], buf)?;
+        Some(len_a + len_b)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::super::Pattern;
+    use crate::patterns::{cap, pat};
     use crate::ReadPattern;
 
     #[test]
@@ -38,5 +45,14 @@ mod tests {
         assert!(empty_pattern.test_pattern(""));
         assert!(!empty_pattern.test_pattern("a"));
         assert!(!empty_pattern.test_pattern("b"));
+    }
+
+    #[test]
+    fn and_pattern_caps() {
+        let pattern = pat(cap(Pattern("foo"))) & cap("bar");
+        let mut caps = Vec::new();
+
+        assert_eq!(pattern.read_pattern_caps("foobar", &mut caps), Some(6));
+        assert_eq!(caps, ["foo", "bar"]);
     }
 }

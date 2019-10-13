@@ -1,4 +1,3 @@
-
 extern crate proc_macro;
 extern crate syn;
 #[macro_use]
@@ -26,7 +25,7 @@ fn impl_read_token_lifetime(ast: &syn::DeriveInput) -> quote::Tokens {
         impl<'t> ReadToken<'t> for #name<'t> {
             type Token = #name<'t>;
 
-            fn read_token(&self, _: &str) -> Self::Token {
+            fn read_token_caps(&self, _: &str, _: &[&str]) -> Self::Token {
                 self.clone()
             }
         }
@@ -39,7 +38,7 @@ fn impl_read_token(ast: &syn::DeriveInput) -> quote::Tokens {
         impl ReadToken<'static> for #name {
             type Token = #name;
 
-            fn read_token(&self, _: &str) -> Self::Token {
+            fn read_token_caps(&self, _: &str, _: &[&str]) -> Self::Token {
                 self.clone()
             }
         }

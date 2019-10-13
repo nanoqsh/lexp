@@ -3,6 +3,10 @@ use std::ops::{Range, RangeInclusive};
 pub trait ReadPattern {
     fn read_pattern(&self, text: &str) -> Option<usize>;
 
+    fn read_pattern_caps<'t>(&self, text: &'t str, _buf: &mut Vec<&'t str>) -> Option<usize> {
+        self.read_pattern(text)
+    }
+
     fn test_pattern(&self, text: &str) -> bool {
         match self.read_pattern(text) {
             Some(len) => len == text.len(),
@@ -89,10 +93,7 @@ mod tests {
     fn read_pattern_str_utf8() {
         let pattern = "привет";
         assert_eq!(pattern.read_pattern("привет"), Some(pattern.len()));
-        assert_eq!(
-            pattern.read_pattern("привет, мир!"),
-            Some(pattern.len())
-        );
+        assert_eq!(pattern.read_pattern("привет, мир!"), Some(pattern.len()));
         assert_eq!(pattern.read_pattern("прив"), None);
     }
 
