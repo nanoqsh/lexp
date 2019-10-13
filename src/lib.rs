@@ -10,6 +10,7 @@ mod read_token;
 pub mod patterns {
     mod and_pattern;
     mod any_pattern;
+    mod capture;
     mod many_pattern;
     mod or_pattern;
     mod pattern;
@@ -18,6 +19,7 @@ pub mod patterns {
 
     pub use and_pattern::AndPattern;
     pub use any_pattern::{AnyPattern, ANY};
+    pub use capture::{cap, Capture};
     pub use many_pattern::ManyPattern;
     pub use or_pattern::OrPattern;
     pub use pattern::{pat, Pattern};

@@ -1,17 +1,21 @@
 pub trait ReadToken<'t> {
     type Token;
-    fn read_token(&self, text: &'t str) -> Self::Token;
+    fn read_token_caps(&self, text: &'t str, caps: &'t [&'t str]) -> Self::Token;
+
+    fn read_token(&self, text: &'t str) -> Self::Token {
+        self.read_token_caps(text, &[])
+    }
 }
 
 impl<'t, T, F> ReadToken<'t> for F
 where
     T: ReadToken<'t>,
-    F: Fn(&'t str) -> T,
+    F: Fn(&'t str, &'t [&'t str]) -> T,
 {
     type Token = T;
 
-    fn read_token(&self, text: &'t str) -> Self::Token {
-        self(text)
+    fn read_token_caps(&self, text: &'t str, caps: &'t [&'t str]) -> Self::Token {
+        self(text, caps)
     }
 }
 
@@ -34,7 +38,7 @@ mod tests {
 
     #[test]
     fn read_token_fn() {
-        let rt = |text: &str| match text {
+        let rt = |text, _| match text {
             "A" => Token::A,
             "B" => Token::B,
             _ => Token::Undefined,
@@ -50,7 +54,7 @@ mod tests {
         Text(&'t str),
     }
 
-    fn rt(text: &str) -> TokenLT {
+    fn rt<'t>(text: &'t str, _: &'t [&'t str]) -> TokenLT<'t> {
         match text {
             t => TokenLT::Text(t),
         }
