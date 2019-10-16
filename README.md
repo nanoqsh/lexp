@@ -7,7 +7,8 @@ let name = alpha * (1..);
 let number = pat('0'..='9') * (1..);
 let comment = pat("/*") & pat(ANY).until("*/");
 
-let lx = lex(' ', Token::Empty)
+let lx =
+      lex(' ', Token::Empty)
     | lex('\n', Token::NewLine)
     | lex('+', Token::Plus)
     | lex('*', Token::Star)
@@ -43,30 +44,30 @@ let tokens: Vec<Token> = lx
 assert_eq!(
     tokens,
     [
-        Token::Let,        // let
-        Token::Name("x"),  // x
-        Token::Eq,         // =
-        Token::Number(10), // 10
-        Token::Semicolon,  // ;
+        Token::Let,                 // let
+        Token::Name("x"),           // x
+        Token::Eq,                  // =
+        Token::Number(10),          // 10
+        Token::Semicolon,           // ;
         Token::NewLine,
         Token::Comment("/* 🦄 */"), // /* 🦄 */
         Token::NewLine,
-        Token::If,           // if
-        Token::LeftBracket,  // (
-        Token::Name("x"),    // x
-        Token::Eq,           // =
-        Token::Number(12),   // 12
-        Token::RightBracket, // )
-        Token::Name("x"),    // x
-        Token::Star,         // *
-        Token::Number(4),    // 4
-        Token::Semicolon,    // ;
+        Token::If,                  // if
+        Token::LeftBracket,         // (
+        Token::Name("x"),           // x
+        Token::Eq,                  // =
+        Token::Number(12),          // 12
+        Token::RightBracket,        // )
+        Token::Name("x"),           // x
+        Token::Star,                // *
+        Token::Number(4),           // 4
+        Token::Semicolon,           // ;
         Token::NewLine,
-        Token::Else,      // else
-        Token::Name("x"), // x
-        Token::Plus,      // +
-        Token::Number(1), // 1
-        Token::Semicolon, // ;
+        Token::Else,                // else
+        Token::Name("x"),           // x
+        Token::Plus,                // +
+        Token::Number(1),           // 1
+        Token::Semicolon,           // ;
     ]
 );
 ```
