@@ -3,7 +3,7 @@ use std::ops::{Range, RangeInclusive};
 pub trait ReadPattern {
     fn read_pattern(&self, text: &str) -> Option<usize>;
 
-    fn read_pattern_caps<'t>(&self, text: &'t str, _buf: &mut Vec<&'t str>) -> Option<usize> {
+    fn read_captures<'t>(&self, text: &'t str, _buf: &mut Vec<&'t str>) -> Option<usize> {
         self.read_pattern(text)
     }
 
