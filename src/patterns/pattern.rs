@@ -21,8 +21,8 @@ where
         self.0.read_pattern(text)
     }
 
-    fn read_pattern_caps<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
-        self.0.read_pattern_caps(text, buf)
+    fn read_captures<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
+        self.0.read_captures(text, buf)
     }
 }
 

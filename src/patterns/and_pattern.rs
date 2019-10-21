@@ -14,9 +14,9 @@ where
         Some(len_a + len_b)
     }
 
-    fn read_pattern_caps<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
-        let len_a = self.0.read_pattern_caps(text, buf)?;
-        let len_b = self.1.read_pattern_caps(&text[len_a..], buf)?;
+    fn read_captures<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
+        let len_a = self.0.read_captures(text, buf)?;
+        let len_b = self.1.read_captures(&text[len_a..], buf)?;
         Some(len_a + len_b)
     }
 }
@@ -52,7 +52,7 @@ mod tests {
         let pattern = pat(cap(Pattern("foo"))) & cap("bar");
         let mut caps = Vec::new();
 
-        assert_eq!(pattern.read_pattern_caps("foobar", &mut caps), Some(6));
+        assert_eq!(pattern.read_captures("foobar", &mut caps), Some(6));
         assert_eq!(caps, ["foo", "bar"]);
     }
 }

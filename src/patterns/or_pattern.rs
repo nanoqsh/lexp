@@ -9,16 +9,15 @@ where
     R: ReadPattern,
 {
     fn read_pattern(&self, text: &str) -> Option<usize> {
-        match self.0.read_pattern(text) {
-            None => self.1.read_pattern(text),
-            s => s,
-        }
+        self.0
+            .read_pattern(text)
+            .or_else(|| self.1.read_pattern(text))
     }
 
-    fn read_pattern_caps<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
+    fn read_captures<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
         let mut add = Vec::new();
-        let result = match self.0.read_pattern_caps(text, &mut add) {
-            None => self.1.read_pattern_caps(text, &mut add),
+        let result = match self.0.read_captures(text, &mut add) {
+            None => self.1.read_captures(text, &mut add),
             s => s,
         };
 
@@ -64,8 +63,8 @@ mod tests {
         let pattern = pat(cap(Pattern("foo"))) | cap("bar");
         let mut caps = Vec::new();
 
-        assert_eq!(pattern.read_pattern_caps("foo", &mut caps), Some(3));
-        assert_eq!(pattern.read_pattern_caps("bar", &mut caps), Some(3));
+        assert_eq!(pattern.read_captures("foo", &mut caps), Some(3));
+        assert_eq!(pattern.read_captures("bar", &mut caps), Some(3));
         assert_eq!(caps, ["foo", "bar"]);
     }
 }

@@ -11,7 +11,7 @@ where
         self.0.read_pattern(text)
     }
 
-    fn read_pattern_caps<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
+    fn read_captures<'t>(&self, text: &'t str, buf: &mut Vec<&'t str>) -> Option<usize> {
         let len = self.0.read_pattern(text)?;
         buf.push(&text[..len]);
         Some(len)
@@ -33,10 +33,7 @@ mod tests {
         let mut caps = Vec::new();
 
         assert_eq!(pattern.read_pattern("text"), Some("text".len()));
-        assert_eq!(
-            pattern.read_pattern_caps("text", &mut caps),
-            Some("text".len())
-        );
+        assert_eq!(pattern.read_captures("text", &mut caps), Some("text".len()));
         assert_eq!(caps, ["text"]);
     }
 
@@ -46,7 +43,7 @@ mod tests {
         let mut caps = Vec::new();
 
         assert_eq!(pattern.read_pattern("a"), Some(1));
-        assert_eq!(pattern.read_pattern_caps("a", &mut caps), Some(1));
+        assert_eq!(pattern.read_captures("a", &mut caps), Some(1));
         assert_eq!(caps, ["a"]);
     }
 }
